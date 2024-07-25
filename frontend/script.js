@@ -5,7 +5,9 @@ async function fetchData() {
   const linksContainer = document.getElementById("links-container");
 
   try {
-    const response = await fetch(`/api/codolio/${username}`);
+    const response = await fetch(
+      `https://dsastats.netlify.app/api/codolio/${username}`
+    );
     if (response.ok) {
       const svg = await response.text();
       svgContainer.innerHTML = svg;
