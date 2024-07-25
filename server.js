@@ -1,5 +1,6 @@
 const express = require("express");
-const { chromium } = require("playwright"); // Import Playwright
+const { Builder, By } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
 const app = express();
 const path = require("path");
 const svgTemplate = require("./svgTemplate");
@@ -11,23 +12,36 @@ app.use(express.static(path.join(__dirname, "./frontend")));
 app.get("/api/codolio/:username", async (req, res) => {
   console.log(req.originalUrl);
   const username = req.params.username;
+
+  let driver;
   try {
-    // Launch a new browser instance
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
+    // Setup Chrome options
+    const chromeOptions = new chrome.Options();
+    chromeOptions.addArguments("--headless"); // Run in headless mode
 
-    await page.goto(`https://codolio.com/profile/${username}`, {
-      waitUntil: "networkidle",
-    });
+    // Initialize the Selenium WebDriver
+    driver = await new Builder()
+      .forBrowser("chrome")
+      .setChromeOptions(chromeOptions)
+      .build();
 
-    const totalQuestionsText = await page.textContent("#total_questions");
+    // Navigate to the user's profile
+    await driver.get(`https://codolio.com/profile/${username}`);
+
+    // Extract data from the page
+    const totalQuestionsText = await driver
+      .findElement(By.css("#total_questions"))
+      .getText();
     const totalQuestions = parseInt(totalQuestionsText.match(/\d+/)[0], 10);
 
-    const totalContests = await page.textContent("#contest_description span");
-    const awards = await page.textContent("#badges div span");
+    const totalContests = await driver
+      .findElement(By.css("#contest_description span"))
+      .getText();
+    const awards = await driver
+      .findElement(By.css("#badges div span"))
+      .getText();
 
-    await browser.close();
-
+    // Generate SVG
     const svg = svgTemplate(username, totalQuestions, totalContests, awards);
 
     res.set("Content-Type", "image/svg+xml");
@@ -36,6 +50,10 @@ app.get("/api/codolio/:username", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(404).send("User not found or error fetching data");
+  } finally {
+    if (driver) {
+      await driver.quit();
+    }
   }
 });
 
