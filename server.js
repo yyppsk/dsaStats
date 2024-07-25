@@ -7,10 +7,7 @@ const path = require("path");
 const svgTemplate = require("./svgTemplate");
 
 app.use(express.static(path.join(__dirname, "./frontend")));
-fs.copyFileSync(
-  path.join(__dirname, "../frontend/index.html"),
-  path.join(__dirname, "../dist/index.html")
-);
+
 app.get("/api/codolio/:username", async (req, res) => {
   console.log(req.originalUrl);
   const username = req.params.username;
