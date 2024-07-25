@@ -1,7 +1,6 @@
 const express = require("express");
-const puppeteer = require("puppeteer-core");
-const chrome = require("chrome-aws-lambda");
 const path = require("path");
+const { chromium } = require("chrome-aws-lambda");
 const svgTemplate = require("./svgTemplate");
 
 const app = express();
@@ -9,17 +8,19 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "./frontend")));
 
+// API route for fetching Codolio data
 app.get("/api/codolio/:username", async (req, res) => {
   console.log(req.originalUrl);
   const username = req.params.username;
 
   try {
-    const browser = await puppeteer.launch({
-      args: chrome.args,
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
+    const browser = await chromium.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: true,
     });
+
     const page = await browser.newPage();
     await page.goto(`https://codolio.com/profile/${username}`, {
       waitUntil: "networkidle2",
@@ -50,6 +51,7 @@ app.get("/api/codolio/:username", async (req, res) => {
   }
 });
 
+// Fallback route to serve the frontend index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./frontend/index.html"));
 });
