@@ -1,13 +1,14 @@
+// netlify/functions/api.js
+
 const express = require("express");
 const puppeteer = require("puppeteer");
 const path = require("path");
 const serverless = require("serverless-http");
-const svgTemplate = require("./svgTemplate");
+const svgTemplate = require("../../svgTemplate");
 
 const app = express();
 
-// Middleware to serve static files from the frontend directory
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../../frontend")));
 
 // API route for fetching Codolio data
 app.get("/api/codolio/:username", async (req, res) => {
@@ -15,7 +16,6 @@ app.get("/api/codolio/:username", async (req, res) => {
   const username = req.params.username;
 
   try {
-    // Launch Puppeteer with no-sandbox option for serverless environments
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
     await page.goto(`https://codolio.com/profile/${username}`, {
@@ -49,8 +49,7 @@ app.get("/api/codolio/:username", async (req, res) => {
 
 // Fallback route to serve the frontend index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "../../frontend/index.html"));
 });
 
-// Export the handler function for Netlify Functions
 module.exports.handler = serverless(app);

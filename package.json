@@ -17,7 +17,8 @@
     "axios": "^1.7.2",
     "express": "^4.19.2",
     "flowbite": "^2.4.1",
-    "puppeteer": "^22.13.1"
+    "puppeteer": "^22.13.1",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.6"
