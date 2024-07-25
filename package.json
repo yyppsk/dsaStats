@@ -16,6 +16,7 @@
     "axios": "^1.7.2",
     "chromedriver": "^127.0.0",
     "express": "^4.19.2",
+    "playwright": "^1.45.3",
     "selenium-webdriver": "^4.23.0"
   },
   "devDependencies": {
