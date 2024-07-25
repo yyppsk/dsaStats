@@ -4,7 +4,8 @@
 
 [functions]
   directory = "netlify/functions"
-  external_node_modules = ["express", "puppeteer", "serverless-http"]
+  external_node_modules = ["express", "puppeteer-core", "chrome-aws-lambda", "serverless-http"]
+
 
 [[redirects]]
   from = "/api/*"
