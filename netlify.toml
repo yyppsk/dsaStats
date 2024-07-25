@@ -2,20 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
-[dev]
-  command = "npm run dev"
-
 [functions]
   directory = "netlify/functions"
-  external_node_modules = ["express", "serverless-http", "puppeteer"]
-  node_bundler = "esbuild"
+  external_node_modules = ["express", "puppeteer", "serverless-http"]
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
   status = 200
