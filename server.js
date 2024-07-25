@@ -1,24 +1,26 @@
 const express = require("express");
-const chromium = require("chrome-aws-lambda");
-const app = express();
-
+const puppeteer = require("puppeteer-core");
+const chrome = require("chrome-aws-lambda");
 const path = require("path");
 const svgTemplate = require("./svgTemplate");
 
+const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "./frontend")));
 
 app.get("/api/codolio/:username", async (req, res) => {
-  console.log(req.originalUrl);
   const username = req.params.username;
   try {
-    const browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-    });
+    // Puppeteer launch options
+    const options = {
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
+      ignoreDefaultArgs: ["--disable-extensions"],
+    };
+
+    const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.goto(`https://codolio.com/profile/${username}`, {
       waitUntil: "networkidle2",
@@ -28,7 +30,6 @@ app.get("/api/codolio/:username", async (req, res) => {
       "#total_questions",
       (el) => el.textContent
     );
-
     const totalQuestions = parseInt(totalQuestionsText.match(/\d+/)[0], 10);
 
     const totalContests = await page.$eval(
@@ -45,7 +46,7 @@ app.get("/api/codolio/:username", async (req, res) => {
     res.send(svg);
   } catch (error) {
     console.error(error);
-    res.status(404).send("User not found or error fetching data");
+    res.status(500).send("User not found or error fetching data");
   }
 });
 
