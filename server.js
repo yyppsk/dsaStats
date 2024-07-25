@@ -47,6 +47,10 @@ app.get("/api/codolio/:username", async (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
+app.get("*", (req, res) => {
+  res.send("No Page");
+  res.end();
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
