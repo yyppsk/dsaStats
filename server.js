@@ -13,7 +13,9 @@ app.get("/api/codolio/:username", async (req, res) => {
   console.log(req.originalUrl);
   const username = req.params.username;
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"], // Common flags needed on serverless environments
+    });
     const page = await browser.newPage();
     await page.goto(`https://codolio.com/profile/${username}`, {
       waitUntil: "networkidle2",
