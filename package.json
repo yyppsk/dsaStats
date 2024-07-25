@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "npx tailwindcss build -i ./frontend/input.css -o ./frontend/output.css --watch"
+    "build:css": "npx tailwindcss build -i ./frontend/input.css -o ./frontend/output.css",
+    "build": "npm run build:css && npm run build:app",
+    "dev": "npm run build:css --watch",
+    "build:app": "node scripts/build.js"
   },
   "keywords": [],
   "author": "",
