@@ -1,16 +1,18 @@
-// server.js
 const express = require("express");
 const puppeteer = require("puppeteer");
-const app = express();
-const port = 3000;
 const path = require("path");
 const svgTemplate = require("./svgTemplate");
 
+const app = express();
+const port = process.env.PORT || 3000;
+
 app.use(express.static(path.join(__dirname, "./frontend")));
 
+// API route for fetching Codolio data
 app.get("/api/codolio/:username", async (req, res) => {
   console.log(req.originalUrl);
   const username = req.params.username;
+
   try {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -36,7 +38,6 @@ app.get("/api/codolio/:username", async (req, res) => {
     const svg = svgTemplate(username, totalQuestions, totalContests, awards);
 
     res.set("Content-Type", "image/svg+xml");
-    // res.set("Cache-Control", "no-cache"); // Disable caching
     res.send(svg);
   } catch (error) {
     console.error(error);
@@ -44,12 +45,9 @@ app.get("/api/codolio/:username", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
-});
+// Fallback route to serve the frontend index.html
 app.get("*", (req, res) => {
-  res.send("No Page");
-  res.end();
+  res.sendFile(path.join(__dirname, "./frontend/index.html"));
 });
 
 app.listen(port, () => {
