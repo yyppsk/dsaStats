@@ -2,13 +2,14 @@
   "name": "devstats",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "postinstall": "npm install selenium-webdriver chromedriver",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "npx tailwindcss build -i ./frontend/input.css -o ./frontend/output.css",
     "build": "npm run build:css && npm run build:app",
     "dev": "npm run build:css --watch",
+    "start": "node app.js",
     "build:app": "node scripts/build.js"
   },
   "dependencies": {
