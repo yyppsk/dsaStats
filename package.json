@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm install selenium-webdriver chromedriver",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "npx tailwindcss build -i ./frontend/input.css -o ./frontend/output.css",
     "build": "npm run build:css && npm run build:app",
