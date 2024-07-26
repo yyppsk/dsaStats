@@ -4,6 +4,8 @@ async function fetchData() {
   const profileLinkContainer = document.getElementById("profile-link");
   const linksContainer = document.getElementById("links-container");
 
+  // load-components.js
+
   try {
     const response = await fetch(`/api/codolio/${username}`);
     if (response.ok) {

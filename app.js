@@ -50,8 +50,20 @@ app.get("/api/codolio/:username", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/about.html"));
+});
+
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/contact.html"));
+});
+
+app.get("/usage", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/usage.html"));
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/index.html"));
 });
 
 app.listen(port, () => {

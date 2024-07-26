@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usage DSASTATS</title>
+    <link
+      href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
+    <!-- Navigation Bar -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("components/nav.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("nav-placeholder").innerHTML = data;
+          });
+
+        fetch("components/footer.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("footer-placeholder").innerHTML = data;
+          });
+      });
+    </script>
+    <div id="nav-placeholder"></div>
+    <div class="container mx-auto p-6">
+      <h1 class="text-xl font-bold mb-4">📊 DSASTATS Usage Guide</h1>
+
+      <ol class="relative border-l border-gray-200 dark:border-gray-700">
+        <!-- Step 1 -->
+        <li class="mb-10 ml-6">
+          <span
+            class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-5 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+          >
+            <svg
+              class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+              />
+            </svg>
+          </span>
+          <h3 class="flex items-center mb-1 text-lg font-semibold ml-4">
+            Step 1: Type Your Username
+          </h3>
+          <p class="text-base font-normal ml-4">
+            Enter your GitHub username in the input area below to generate an
+            SVG file that can be embedded in your GitHub README profile.
+          </p>
+        </li>
+
+        <!-- Step 2 -->
+        <li class="mb-10 ml-6">
+          <span
+            class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+          >
+            <svg
+              class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+              />
+            </svg>
+          </span>
+          <h3 class="flex items-center mb-1 text-lg font-semibold ml-4">
+            Step 2: Set Up GitHub Actions
+          </h3>
+          <p class="text-base font-normal ml-4">
+            Follow these steps to set up GitHub Actions to automate the update
+            of your SVG file:
+          </p>
+          <ol class="list-decimal ml-8 mb-4">
+            <li class="mb-2">
+              <strong>Create or Open Your GitHub Repository:</strong>
+              <p class="text-base font-normal ml-4">
+                Navigate to your GitHub account and either create a new
+                repository or open an existing one where you want to set up the
+                workflow.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Access the Actions Tab:</strong>
+              <p class="text-base font-normal ml-4">
+                Go to the repository's main page. Click on the "Actions" tab
+                located near the top of the page to access the workflows
+                section.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Set Up a New Workflow:</strong>
+              <p class="text-base font-normal ml-4">
+                Click the "New workflow" button or "Set up a workflow yourself"
+                if you're setting it up manually.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Configure the Workflow File:</strong>
+              <p class="text-base font-normal ml-4">
+                Copy the YAML code provided below and paste it into the editor:
+              </p>
+              <pre
+                class="bg-gray-800 text-white p-4 rounded overflow-x-auto mt-4 mb-4"
+              >
+                  <code class="yaml">
+        name: Update Stats Card
+        
+        permissions:
+          contents: write
+        
+        on:
+          workflow_dispatch:
+          push:
+            branches:
+              - main
+          schedule:
+            - cron: "0 0 * * *" # This will run the workflow daily
+        
+        jobs:
+          update-stats-card:
+            runs-on: ubuntu-latest
+            steps:
+              - name: Checkout repository
+                uses: actions/checkout@v3
+        
+              - name: Fetch Stats and Save SVG
+                run: |
+                  # Fetch the latest stats card as an SVG
+                  curl -o stats.svg https://www.devstats.site/api/codolio/{your codolio username}
+                  
+              - name: Force Commit changes
+                run: |
+                  git config --global user.name 'github-actions[bot]'
+                  git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+                  
+                  # Add a timestamp to the commit message to ensure a new commit is created
+                  git add stats.svg
+                  git commit -m "Update stats card $(date +'%Y-%m-%d %H:%M:%S')"
+                  
+                  # Pull latest changes from remote to avoid conflicts
+                  git pull --rebase
+                  
+                  # Push the changes to the remote repository
+                  git push
+                  </code>
+                </pre>
+              <p class="text-base font-normal ml-4">
+                Replace `{your codolio username}` with your actual Codolio
+                username in the `curl` command.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Save and Commit the Workflow File:</strong>
+              <p class="text-base font-normal ml-4">
+                Save the file by naming it `update-stats.yml` or any other
+                descriptive name. Click "Start commit" to commit the new
+                workflow file to your repository.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Verify the Workflow:</strong>
+              <p class="text-base font-normal ml-4">
+                Once committed, the workflow should be visible under the
+                "Actions" tab. You can manually trigger the workflow to test it
+                by clicking the "Run workflow" button on the workflow page.
+              </p>
+            </li>
+            <li class="mb-2">
+              <strong>Check for Updates:</strong>
+              <p class="text-base font-normal ml-4">
+                The workflow will now run daily based on the schedule specified
+                in the `cron` expression (`0 0 * * *` for daily at midnight
+                UTC). You can check the status and logs of each workflow run in
+                the "Actions" tab to ensure everything is working correctly.
+              </p>
+            </li>
+          </ol>
+        </li>
+
+        <!-- Step 3 -->
+        <li class="ml-6">
+          <span
+            class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-5 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+          >
+            <svg
+              class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
+              />
+            </svg>
+          </span>
+          <h3 class="flex items-center mb-1 text-lg font-semibold ml-4">
+            Step 3: Choose Your Version
+          </h3>
+          <p class="text-base font-normal ml-4">
+            You can choose between two versions of the DSA Stats card: a fixed
+            size version and a variable width version. Here's the code for each:
+          </p>
+          <div class="mb-4 ml-4">
+            <h4 class="text-lg font-bold mb-2">Fixed Size Version</h4>
+            <pre
+              class="bg-gray-800 text-white p-4 rounded overflow-x-auto mb-4"
+            >
+                  <code>
+      <!-- Fixed Size Version -->
+      ![DSA Stats](https://your-api-url.com/api/fixed/pranjalsingh)
+                  </code>
+                </pre>
+          </div>
+          <div class="mb-4 ml-4">
+            <h4 class="text-lg font-bold mb-2">Variable Width Version</h4>
+            <pre
+              class="bg-gray-800 text-white p-4 rounded overflow-x-auto mb-4"
+            >
+                  <code>
+      <!-- Variable Width Version -->
+      ![DSA Stats](https://your-api-url.com/api/variable/pranjalsingh)
+                  </code>
+                </pre>
+          </div>
+          <p class="text-base font-normal ml-4">
+            Voila! 🎉 You now have a beautiful dev stat dashboard on your GitHub
+            profile!
+          </p>
+        </li>
+      </ol>
+    </div>
+
+    <div id="footer-placeholder"></div>
+  </body>
+</html>

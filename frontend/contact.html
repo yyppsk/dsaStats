@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us</title>
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Navigation Bar -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("components/nav.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("nav-placeholder").innerHTML = data;
+          });
+
+        fetch("components/footer.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("footer-placeholder").innerHTML = data;
+          });
+      });
+    </script>
+
+    <div id="nav-placeholder"></div>
+
+    <main class="flex-grow flex items-center justify-center p-6 bg-gray-100">
+      <div class="text-center max-w-lg mx-auto">
+        <h1 class="text-3xl font-bold mb-4">Contact Us</h1>
+        <p class="text-lg mb-4">
+          If you have any questions or feedback, feel free to reach out to us
+          through the following channels:
+        </p>
+        <p class="text-lg mb-4">
+          You can also check out our GitHub repository for more information:
+          <a
+            href="https://github.com/yyppsk/dsaStats"
+            class="text-blue-600 hover:underline"
+            >GitHub Repository</a
+          >
+        </p>
+      </div>
+    </main>
+
+    <div id="footer-placeholder" class="text-white py-4 text-center">
+      <!-- Footer content will be loaded here -->
+    </div>
+  </body>
+</html>
