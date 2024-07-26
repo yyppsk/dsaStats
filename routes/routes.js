@@ -1,8 +1,10 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
+const fs = require("fs");
 
 const frontendPath = path.join(__dirname, "../frontend");
+const logFilePath = path.join(__dirname, "../logs.json");
 
 const setNoCacheHeaders = (res) => {
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -34,6 +36,16 @@ router.get("/usage", (req, res) => {
 router.get("/", (req, res) => {
   setNoCacheHeaders(res);
   res.status(200).sendFile(`${frontendPath}${req.path}.html`);
+});
+
+router.get("/checklogs", (req, res) => {
+  fs.readFile(logFilePath, (err, data) => {
+    if (err) {
+      return res.status(500).send("Error reading log file");
+    }
+    const logs = JSON.parse(data);
+    res.json(logs);
+  });
 });
 
 module.exports = router;
