@@ -1,37 +1,48 @@
 const express = require("express");
-const { chromium } = require("playwright"); // Import Playwright
+const puppeteer = require("puppeteer"); // Use puppeteer
 const app = express();
+const cors = require("cors");
 const path = require("path");
 const svgTemplate = require("./svgTemplate");
+
+app.use(cors());
 
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "./frontend")));
 
 app.get("/api/codolio/:username", async (req, res) => {
+  const currentDateTime = new Date().toLocaleString();
+  console.log(`[${currentDateTime}] Requested URL: ${req.originalUrl}`);
   console.log(req.originalUrl);
   const username = req.params.username;
   try {
-    // Launch a new browser instance
-    const browser = await chromium.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
-
     await page.goto(`https://codolio.com/profile/${username}`, {
-      waitUntil: "networkidle",
+      waitUntil: "networkidle2",
     });
 
-    const totalQuestionsText = await page.textContent("#total_questions");
+    const totalQuestionsText = await page.$eval(
+      "#total_questions",
+      (el) => el.textContent
+    );
+
     const totalQuestions = parseInt(totalQuestionsText.match(/\d+/)[0], 10);
 
-    const totalContests = await page.textContent("#contest_description span");
-    const awards = await page.textContent("#badges div span");
+    const totalContests = await page.$eval(
+      "#contest_description span",
+      (el) => el.textContent
+    );
+    const awards = await page.$eval("#badges div span", (el) => el.textContent);
 
     await browser.close();
 
     const svg = svgTemplate(username, totalQuestions, totalContests, awards);
 
     res.set("Content-Type", "image/svg+xml");
-    // res.set("Cache-Control", "no-cache"); // Disable caching
     res.send(svg);
   } catch (error) {
     console.error(error);

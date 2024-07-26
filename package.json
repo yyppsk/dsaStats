@@ -4,21 +4,14 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "postinstall": "npm install selenium-webdriver chromedriver",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "npx tailwindcss build -i ./frontend/input.css -o ./frontend/output.css",
-    "build": "npm run build:css && npm run build:app",
-    "dev": "npm run build:css --watch",
-    "start": "node app.js",
-    "build:app": "node scripts/build.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "@puppeteer/browsers": "^2.3.0",
     "axios": "^1.7.2",
-    "chromedriver": "^127.0.0",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
-    "playwright": "^1.45.3",
-    "selenium-webdriver": "^4.23.0"
+    "puppeteer": "^22.14.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.6"
