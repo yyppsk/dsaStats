@@ -10,8 +10,9 @@ const setNoCacheHeaders = (res) => {
   res.setHeader("Expires", "0");
 };
 
-router.get("/healthChecker", (req, res) => {
+router.get("/healthchecker", (req, res) => {
   setNoCacheHeaders(res);
+  //IMPORTANT CHECK!!
   res.status(200).send("<h1>All Systems Working !</h1>");
 });
 
