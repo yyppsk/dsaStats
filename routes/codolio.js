@@ -7,7 +7,8 @@ const requestIp = require("request-ip"); // Add this line
 const router = express.Router();
 
 router.get("/codolio/:username", async (req, res) => {
-  const logFilePath = path.join(__dirname, "../logs.json");
+  const logFilePath = path.join(__dirname, "../logs/logs.json");
+  console.log(logFilePath);
   if (!fs.existsSync(logFilePath)) {
     fs.writeFileSync(logFilePath, JSON.stringify([]));
   }
@@ -101,17 +102,6 @@ router.get("/codolio/:username", async (req, res) => {
     console.error(error);
     res.status(404).send("User not found or error fetching data");
   }
-});
-
-router.get("/checklogs", (req, res) => {
-  const logFilePath = path.join(__dirname, "../logs.json");
-  fs.readFile(logFilePath, (err, data) => {
-    if (err) {
-      return res.status(500).send("Error reading log file");
-    }
-    const logs = JSON.parse(data);
-    res.status(200).json(logs);
-  });
 });
 
 module.exports = router;

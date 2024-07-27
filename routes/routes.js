@@ -4,7 +4,7 @@ const router = express.Router();
 const fs = require("fs");
 
 const frontendPath = path.join(__dirname, "../frontend");
-const logFilePath = path.join(__dirname, "../logs.json");
+const logFilePath = path.join(__dirname, "../logs/logs.json");
 
 const setNoCacheHeaders = (res) => {
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
