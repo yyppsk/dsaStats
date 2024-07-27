@@ -5,7 +5,7 @@ const path = require("path");
 
 const commonRoutes = require("./routes/routes");
 const codolioRouter = require("./routes/codolio");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());

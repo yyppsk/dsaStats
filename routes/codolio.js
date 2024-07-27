@@ -3,6 +3,7 @@ const puppeteer = require("puppeteer");
 const svgTemplate = require("../svgTemplate");
 const fs = require("fs");
 const path = require("path");
+const requestIp = require("request-ip"); // Add this line
 const router = express.Router();
 
 router.get("/codolio/:username", async (req, res) => {
@@ -13,10 +14,13 @@ router.get("/codolio/:username", async (req, res) => {
   const currentDateTime = new Date().toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
   });
+
+  const clientIp = requestIp.getClientIp(req); // Get the client's IP address
+
   const logEntry = {
     path: req.originalUrl,
     time: currentDateTime,
-    ip: req.ip,
+    ip: clientIp, // Use clientIp here
     username: req.params.username,
   };
 
@@ -30,7 +34,9 @@ router.get("/codolio/:username", async (req, res) => {
     });
   });
 
-  console.log(`[${currentDateTime}] Requested URL: ${req.originalUrl}`);
+  console.log(
+    `[${currentDateTime}] Requested URL: ${req.originalUrl} from IP: ${clientIp}`
+  );
 
   const username = req.params.username;
 
