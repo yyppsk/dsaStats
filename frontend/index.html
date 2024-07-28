@@ -195,7 +195,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 * * * *" # This will run the workflow every hour
+    - cron: "0 8 * * *" # This will run the workflow every day 8:00 pm IST
 
 jobs:
   update-stats-card:
